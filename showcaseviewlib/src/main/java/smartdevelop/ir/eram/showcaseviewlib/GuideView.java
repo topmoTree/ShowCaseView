@@ -273,14 +273,17 @@ public class GuideView extends FrameLayout {
         return mIsShowing;
     }
 
-    public void dismiss(boolean triggerListener) {
+    public void dismiss() {
         ((ViewGroup) ((Activity) getContext()).getWindow().getDecorView()).removeView(this);
         mIsShowing = false;
-        if (triggerListener){
-            if (mGuideListener != null) {
-                mGuideListener.onDismiss(target);
-            }
+        if (mGuideListener != null) {
+            mGuideListener.onDismiss(target);
         }
+    }
+
+    public void close() {
+        ((ViewGroup) ((Activity) getContext()).getWindow().getDecorView()).removeView(this);
+        mIsShowing = false;
     }
 
     @Override
@@ -293,24 +296,24 @@ public class GuideView extends FrameLayout {
 
                 case outside:
                     if (!isViewContains(mMessageView, x, y)) {
-                        dismiss(true);
+                        dismiss();
                     }
                     break;
 
                 case anywhere:
-                    dismiss(true);
+                    dismiss();
                     break;
 
                 case targetView:
                     if (targetRect.contains(x, y)) {
                         target.performClick();
-                        dismiss(true);
+                        dismiss();
                     }
                     break;
 
                 case selfView:
                     if (isViewContains(mMessageView, x, y)) {
-                        dismiss(true);
+                        dismiss();
                     }
                     break;
             }
